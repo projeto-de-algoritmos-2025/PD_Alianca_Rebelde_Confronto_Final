@@ -41,7 +41,7 @@ Para mais detalhes sobre a história, os personagens, os algoritmos abordados e 
 - Missão 5: O Eco das Escolhas
 
 
-Para ter acesso aos códigos dos algoritmos clique em [Aliança Rebelde- O Confronto Final](/PD_Alianca_Rebelde_Confronto_Final/PD_Confronto_Final/algoritmos_pd/)
+Para ter acesso aos códigos dos algoritmos clique em [Aliança Rebelde- O Confronto Final](/algoritmos_pd/)
 
 ## Link do vídeo
 
@@ -53,21 +53,21 @@ Abaixo estão os screenshots do projeto
 
 ### Missão 1 - Sombras no Tempo - (Weighted Interval Scheduling)
 #### Missão 1 - Introdução
-![Missão 1 - Introdução](/PD_Alianca_Rebelde_Confronto_Final/capturas_telas/missao1-1.png)
+![Missão 1 - Introdução](/img/missao1-1.png)
 #### Missão 1 - Desafio
-![Missão 1 - Desafio](/PD_Alianca_Rebelde_Confronto_Final/capturas_telas/missao1-2.png)
+![Missão 1 - Desafio](/img/missao1-2.png)
 
 #### Missão 1 - Acerto
-![Missão 1 - Acerto](/PD_Alianca_Rebelde_Confronto_Final/capturas_telas/missao1-3.png)
+![Missão 1 - Acerto](/img/missao1-3.png)
 
 
 ### Missão 2 - Ascensão Inesperada - (Maior Subsequência Crescente)
 
 
-#### Missão 2 - Introdução
-![Missão 2 - Introdução]
-#### Missão 2 - Desafio
-![Missão 2 - Desafio]
+#### Missão 2 - Introdução e Desafio
+![Missão 2 - Introdução](/img/missao2-1.png)
+#### Missão 2 - Acerto
+![Missão 2 - Desafio](/img/missao2-2.png)
 
 
 #### Missão 2 - Acerto
@@ -138,14 +138,14 @@ Você saberá que o ambiente virtual está ativo porque o nome dele aparecerá n
 Para que o jogo funcione corretamente, especialmente o carregamento de imagens e módulos, ele espera a seguinte estrutura de pastas dentro do diretório principal do projeto:
 
       PD_Alianca_Rebelde_Confronto_Final/
-      ├── capturas_telas              # Pasta com images
-      ├── PD_Confronto_Final
-      |      ├── algoritmos_pd/                 # Pasta para os algoritmos
+      ├── algoritmos_pd/                 # Pasta para os algoritmos
       │            ├── __init__.py
       │            ├── alinhamento_sequencias.py
       │            ├── knapsack_com_pd.py
       │            ├── maior_subsequencia_crescente.py
       │            ├── weighted_interval_scheduling.py
+      |
+      ├── img/        # Pasta com imagens
       |
       ├── missoes/                    # Pasta para as missões 
       │   ├── __init__.py

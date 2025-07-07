@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import random
 from algoritmos_pd.weigthed_interval_scheduling import Intervalo, weighted_interval_scheduling
 
-class missao1:
+class Missao1:
     def __init__(self, root, game_manager, content_frame):
         self.root = root
         self.game_manager = game_manager
