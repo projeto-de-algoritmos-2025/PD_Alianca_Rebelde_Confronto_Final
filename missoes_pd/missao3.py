@@ -1,0 +1,1 @@
+# knapsack pd - carga de resistencia
