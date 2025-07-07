@@ -1,0 +1,30 @@
+# Ignora pastas de ambiente virtual Python
+venv/
+.venv/
+
+# Ignora caches e arquivos temporários do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+
+
+# Ignora caches de
+
+.vscode/    # VS Code
