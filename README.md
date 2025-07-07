@@ -11,7 +11,7 @@ A Rebelião está em sua fase mais crítica. Apenas com estratégias otimizadas 
     <br>
 </div>
 
-<h2 align="center">É dividindo que se consquista!</h2>
+<h2 align="center">A Programação é Dinâmica</h2>
 
 <strong>"Aliança Rebelde - O Confronto Final"</strong> é um jogo de estratégia e puzzle narrativo, que se passa depois do jogo "Aliança Rebelde-  Operações Críticas" e "Aliança Rebelde 2 - A volta dos desafios" . Nele o jogador assume o papel de um(a) Coordenador(a) de Operações da Aliança Rebelde. A Rebelião está em sua fase mais crítica. Apenas com estratégias otimizadas será possível vencer. Cada missão exige o uso de técnicas de Programação Dinâmica para encontrar a melhor solução diante de recursos escassos, decisões em cadeia e cenários complexos.
 
@@ -69,8 +69,20 @@ Abaixo estão os screenshots do projeto
 #### Missão 2 - Acerto
 ![Missão 2 - Desafio](/img/missao2-2.png)
 
+### Missão 3 - Carga de Resistência - (Knapsack com PD)
 
-#### Missão 2 - Acerto
+### Missão 4 - DNA de Esperança - (Alinhamento de Sequências)
+
+
+
+### Missão 5 - O Eco das Escolhas
+
+
+#### Missão 5 - Introdução e Desafio
+![Missão 5 - Introdução e desafio](/img/missao5.png)
+#### Encerramento
+![Encerramento](/img/missao5-2.png)
+
 
 ## Instalação 
 

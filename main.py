@@ -9,9 +9,9 @@ import sys
 try:
     from missoes_pd.missao1 import Missao1
     from missoes_pd.missao2 import Missao2
-    from missoes_pd.missao3 import missao3
-    from missoes_pd.missao4 import missao4
-    from missoes_pd.missao5 import missao5
+    #from missoes_pd.missao3 import missao3
+   # from missoes_pd.missao4 import missao4
+    from missoes_pd.missao5 import Missao5
 
 except ImportError as e:    
     print(f"ALERTA DE IMPORTAÇÃO DE MÓDULO: {e}")
@@ -36,7 +36,7 @@ class GameManager:
         self.imagens = {} # um dicionário para organizar as imagens
         nomes_imagens = [
             "alianca_simbolo.png", "Cena1.png", "Cena2.png", 
-            "Cena3.png", "Cena4.png", "Cena5.png", "Cena6.png"
+            "Cena3.png", "Cena4.png", "Cena5.png", "Cena6.png", "party.png"
         ]
         for nome_img in nomes_imagens:
             try:
@@ -172,22 +172,41 @@ class GameManager:
              self._display_text_screen("Segredos Decifrados", dialogo, "Avançar para a Próxima Missão", "START_MISSION_5", button_style="Accent.Dark.TButton", image_to_display=self.imagens.get("alianca_simbolo.png"))
         
         elif self.game_state == "START_MISSION_5":
-            if 'missao5' in globals():
+            if 'Missao5' in globals():
                 self._clear_content_frame()
-                self.current_mission_obj = missao5(self.root, self, self.content_frame)
+                self.current_mission_obj = Missao5(self.root, self, self.content_frame)
                 self.current_mission_obj.iniciar_missao_contexto()
             else:
-                messagebox.showerror("Erro Crítico", "Classe missao5 não foi carregada.")
+                messagebox.showerror("Erro Crítico", "Classe Missao5 não foi carregada.")
         elif self.game_state == "MISSION_5_SUCCESS":
             dialogo = ["Conselho da Aliança: \"Você guiou esta campanha com sabedoria, estratégia e coragem. A Rebelião não esquecerá sua liderança.\""]
             self._display_text_screen("O Eco das Escolhas", dialogo, "Ver o Epílogo", "ALL_MISSIONS_COMPLETED_V3", image_to_display=self.imagens.get("alianca_simbolo.png"))
 
         elif self.game_state == "ALL_MISSIONS_COMPLETED_V3":
-            self._display_text_screen("A Rebelião Resiste", [
-                "A última fase da guerra ainda está por vir, mas graças às decisões que você tomou, a galáxia tem uma nova esperança.",
-                "Líderes inspirados, bases reforçadas, códigos quebrados... tudo começou com você."
-            ], "Encerrar Jornada", self.root.quit, image_to_display=self.imagens.get("alianca_simbolo.png"))
+            # 1) Tela base com título, texto e botão:
+            self._display_text_screen(
+                "A Rebelião Resiste",
+                [
+                    "A última fase da guerra ainda está por vir, mas graças às decisões que você tomou, a galáxia tem uma nova esperança.",
+                    "Líderes inspirados, bases reforçadas, códigos quebrados... tudo começou com você."
+                ],
+                "Encerrar Jornada",
+                self.root.quit,
+                button_style="Accent.Dark.TButton",
+                image_to_display=None   # desliga a imagem aqui
+            )
 
+            # 2) Agora empacota a imagem abaixo do botão:
+            img = self.imagens.get("party.png")
+            if img:
+                tk.Label(self.content_frame, image=img, bg=self.bg_color_dark).pack(pady=(10,5))
+            else:
+                tk.Label(
+                    self.content_frame,
+                    text="(Imagem party.png não encontrada)",
+                    fg=self.fg_color_light,
+                    bg=self.bg_color_dark
+                ).pack(pady=(10,5))
         
         else: 
             self._clear_content_frame()
@@ -204,11 +223,11 @@ class GameManager:
 
     def mission_completed(self, mission_id):
         print(f"GameManager: Missão {mission_id} concluída.") 
-        if mission_id == "missao1": self.set_game_state("MISSION_1_SUCCESS") 
-        elif mission_id == "missao2": self.set_game_state("MISSION_2_SUCCESS")
-        elif mission_id == "missao3": self.set_game_state("MISSION_3_SUCCESS")
-        elif mission_id == "missao4": self.set_game_state("MISSION_4_SUCCESS")
-        elif mission_id == "missao5": self.set_game_state("ALL_MISSIONS_COMPLETED_V3")
+        if mission_id == "Missao1": self.set_game_state("MISSION_1_SUCCESS") 
+        elif mission_id == "Missao2": self.set_game_state("MISSION_2_SUCCESS")
+        elif mission_id == "Missao3": self.set_game_state("MISSION_3_SUCCESS")
+        elif mission_id == "Missao4": self.set_game_state("MISSION_4_SUCCESS")
+        elif mission_id == "Missao5": self.set_game_state("ALL_MISSIONS_COMPLETED_V3")
     
     def mission_failed_options(self, mission_obj, msg1, msg2):
         self._clear_content_frame()
