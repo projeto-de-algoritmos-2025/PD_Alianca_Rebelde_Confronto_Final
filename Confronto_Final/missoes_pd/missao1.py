@@ -78,10 +78,13 @@ class Missao1:
             for _ in range(6)
         ], key=lambda x: x.fim)
 
-        # 🛠️ Corrigido: extração apenas dos intervalos, e depois os índices
         _, solucao_intervalos = weighted_interval_scheduling(self.instancias)
         self.solucao_correta = [self.instancias.index(i) for i in solucao_intervalos]
         self.solucao_correta.sort()
+        
+        # --- NOVO PRINT ADICIONADO AQUI ---
+        print(f"DEBUG (Missao1): Solução Correta Esperada: {self.solucao_correta}")
+        # -----------------------------------
 
         tk.Label(
             self.base_content_frame,
@@ -136,8 +139,11 @@ class Missao1:
         if resposta == self.solucao_correta:
             pontos = 350
             self.game_manager.add_score(pontos)
+            
             messagebox.showinfo("Sucesso", f"Excelente escolha! Ataques interceptados com precisão tática.\n+{pontos} pontos de influência.")
-            self.game_manager.mission_completed("MissaoCF1")
+            
+            self.root.after_idle(lambda: self.game_manager.mission_completed("Missao1"))
+            
         else:
             valor_correto = ", ".join(map(str, self.solucao_correta))
             self.game_manager.add_score(-75)
@@ -147,4 +153,3 @@ class Missao1:
                 "Erro de Planejamento",
                 "Fulcrum: \"Nem todas as escolhas foram as mais estratégicas... mas ainda há tempo de ajustar a rota.\""
             )
-

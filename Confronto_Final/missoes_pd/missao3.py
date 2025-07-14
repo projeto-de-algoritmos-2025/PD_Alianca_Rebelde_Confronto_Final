@@ -131,7 +131,7 @@ class Missao3:
 
         self.capacidade_mochila = 8 # Capacidade máxima da nave: FIXO em 8 para este cenário
         
-        # Ajusta a quantidade de itens a serem selecionados para 4 ou 5
+        
         num_items_to_select_desired = random.randint(4, 5) 
 
         valid_items_for_capacity = [
@@ -169,33 +169,37 @@ class Missao3:
         self.valores_itens = [item["valor"] for item in selected_items_data]
         self.pesos_itens = [item["peso"] for item in selected_items_data]
         
-        # DEBUG: Printa os inputs antes de chamar knapsack_01_pd
+        
         print("\n--- DEBUG: Inputs para knapsack_01_pd ---")
         print(f"Valores: {self.valores_itens}")
         print(f"Pesos: {self.pesos_itens}")
         print(f"Capacidade: {self.capacidade_mochila}")
 
-        # ### CORREÇÃO CRÍTICA: Atribuição e verificação imediata dos retornos de knapsack_01_pd
-        temp_dp_table, temp_valor_final, temp_itens_selecionados = \
+        
+        temp_dp_table, _, temp_itens_selecionados = \
             knapsack_01_pd(self.valores_itens, self.pesos_itens, self.capacidade_mochila)
         
         self.dp_table_correta = temp_dp_table
-        self.valor_final_correto = temp_valor_final
+        
+        
+        self.valor_final_correto = self.dp_table_correta[len(self.valores_itens)][self.capacidade_mochila]
+        
         self.itens_selecionados_corretos = temp_itens_selecionados
 
-        # DEBUG: Printa os resultados IMEDIATAMENTE após a atribuição para confirmar
+       
         print("\n--- DEBUG: Resultados de knapsack_01_pd (Após Atribuição) ---")
         print("Tabela DP Correta:")
         for row in self.dp_table_correta:
+            
             print([f"{x:3}" for x in row]) 
-        print(f"Valor Ótimo Final (diretamente de knapsack_01_pd): {self.valor_final_correto}")
+        print(f"Valor Ótimo Final (derivado da tabela DP): {self.valor_final_correto}")
         print(f"Itens Selecionados (índices): {self.itens_selecionados_corretos}")
         
         selected_items_info_debug = [f"{self.nomes_itens[idx]} (V={self.valores_itens[idx]}, P={self.pesos_itens[idx]})" for idx in self.itens_selecionados_corretos]
         print(f"Itens Selecionados (nomes e detalhes): {', '.join(selected_items_info_debug)}")
         print("-------------------------------------------\n")
 
-        # player_dp_table será preenchida pelo jogador. Inicializa com zeros.
+        
         n_items = len(self.valores_itens)
         self.player_dp_table = [[0 for _ in range(self.capacidade_mochila + 1)] for _ in range(n_items + 1)] 
         
@@ -205,7 +209,7 @@ class Missao3:
 
         tk.Label(
             self.base_content_frame,
-            text="Etapa 1/2: Preenchimento da Tabela de Programação Dinâmica", # Título atualizado
+            text="Etapa 1/2: Preenchimento da Tabela de Programação Dinâmica", 
             font=self.button_font,
             fg="#FF64F2",
             bg=self.bg_color
@@ -263,6 +267,10 @@ class Missao3:
 
         self.hint_button = ttk.Button(control_frame, text="Dica Geral (PD)", command=self._mostrar_dica_geral_pd, style="Dark.TButton") 
         self.hint_button.pack(side=tk.LEFT, padx=5)
+        
+        
+        self.analyze_all_button = ttk.Button(control_frame, text="Analisar Tabela Completa", command=self._analisar_todas_as_celulas, style="Dark.TButton")
+        self.analyze_all_button.pack(side=tk.LEFT, padx=5)
 
         self.confirm_table_button = ttk.Button(control_frame, text="Confirmar Tabela e Avançar", command=self._confirmar_tabela_e_avancar, style="Accent.Dark.TButton", state=tk.NORMAL) 
         self.confirm_table_button.pack(side=tk.LEFT, padx=5)
@@ -308,7 +316,7 @@ class Missao3:
                 entry.grid(row=i+1, column=w+1, sticky="nsew")
                 self.cell_entries[(i, w)] = entry
 
-                # Preencher as células base (0, w) e (i, 0) com 0 e desabilitá-las
+                
                 if i == 0 or w == 0:
                     entry.insert(0, "0")
                     entry.config(state=tk.DISABLED, bg=self.bg_color, fg=self.fg_color)
@@ -316,7 +324,7 @@ class Missao3:
                 else: # Habilita o foco para células editáveis e o highlight
                     entry.bind("<FocusIn>", lambda e, r=i, c=w: self._on_cell_focus(r, c))
                     entry.bind("<Return>", lambda e: self._verificar_celula_atual()) # Para testar com Enter
-                    # Limpa qualquer valor prévio se a missão for reiniciada
+                    
                     entry.delete(0, tk.END)
 
 
@@ -331,9 +339,13 @@ class Missao3:
         if hasattr(self, 'last_focused_cell') and self.last_focused_cell:
             prev_r, prev_c = self.last_focused_cell
             if (prev_r, prev_c) in self.cell_entries:
-                # Restaura a cor de fundo original, a menos que seja uma célula já verificada e colorida.
-                if self.cell_entries[(prev_r, prev_c)].cget('state') == tk.NORMAL: # Apenas se for editável
+                
+                prev_entry_bg = self.cell_entries[(prev_r, prev_c)].cget('bg')
+                if prev_entry_bg not in [self.correct_cell_bg, self.incorrect_cell_bg]:
                     self.cell_entries[(prev_r, prev_c)].config(highlightbackground=self.default_cell_border, highlightcolor=self.default_cell_border)
+                elif prev_entry_bg == self.incorrect_cell_bg: # Se era vermelha, mantém borda vermelha
+                    self.cell_entries[(prev_r, prev_c)].config(highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
+
 
         self.current_item_idx = r
         self.current_weight_idx = c
@@ -342,17 +354,16 @@ class Missao3:
         current_entry = self.cell_entries.get((self.current_item_idx, self.current_weight_idx))
         if current_entry and current_entry.cget('state') != tk.DISABLED:
             current_entry.config(highlightbackground=self.active_cell_border, highlightcolor=self.active_cell_border)
-            current_entry.focus_set() # Garante que o foco visual esteja na célula
-            current_entry.select_range(0, tk.END) # Seleciona o conteúdo ao focar para facilitar a digitação
-            # Rolagem é manual, então não há xview_moveto/yview_moveto aqui.
-        
+            current_entry.focus_set() 
+            current_entry.select_range(0, tk.END) 
+            
     def _verificar_celula_atual(self):
         """
         Verifica se o valor da célula atualmente focada está correto (opcional para o jogador).
         Pinta a célula de verde se correto e desabilita, de vermelho se incorreto.
         Não avança automaticamente, apenas serve como feedback.
         """
-        # Se não há célula focada ou a célula é base (0)
+        
         if not hasattr(self, 'current_item_idx') or self.current_item_idx == 0 or self.current_weight_idx == 0:
             messagebox.showinfo("Aviso", "Por favor, selecione uma célula da tabela (não da linha/coluna 0) para verificar.")
             return
@@ -361,26 +372,26 @@ class Missao3:
         c = self.current_weight_idx
         entry = self.cell_entries.get((r, c))
 
-        if not entry or entry.cget('state') == tk.DISABLED: # Se já foi verificada e desabilitada
+        if not entry or entry.cget('state') == tk.DISABLED: 
             messagebox.showinfo("Aviso", "Esta célula já foi preenchida e verificada, ou é uma célula base.")
             return
 
         try:
-            player_value = int(entry.get().strip()) # .strip() para remover espaços em branco
+            player_value = int(entry.get().strip()) 
             correct_value = self.dp_table_correta[r][c]
 
             if player_value == correct_value:
                 entry.config(bg=self.correct_cell_bg, state=tk.DISABLED, fg="white", highlightbackground=self.correct_cell_bg, highlightcolor=self.correct_cell_bg)
                 messagebox.showinfo("Correto!", "Valor inserido corretamente!")
-                # Atualiza o valor na player_dp_table imediatamente, para uso em dicas futuras
+                
                 self.player_dp_table[r][c] = player_value 
             else:
                 entry.config(bg=self.incorrect_cell_bg, fg="white", highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
-                self.game_manager.add_score(-10) # Penalidade por erro ao verificar
+                self.game_manager.add_score(-10) 
                 messagebox.showerror("Incorreto!", "Valor incorreto. Revise sua lógica para esta célula.")
-                self._mostrar_dica_especifica_knapsack_com_valores(r, c) # Oferece dica específica
-                entry.focus_set() # Mantém o foco na célula errada
-                entry.select_range(0, tk.END) # Seleciona o texto para facilitar a correção
+                self._mostrar_dica_especifica_knapsack_com_valores(r, c) 
+                entry.focus_set() 
+                entry.select_range(0, tk.END) 
 
         except ValueError:
             messagebox.showerror("Entrada Inválida", "Por favor, insira um número inteiro na célula.")
@@ -389,11 +400,12 @@ class Missao3:
         
     def _mostrar_dica_especifica_knapsack_com_valores(self, r, c): 
         """Mostra uma dica mais detalhada para uma célula, usando os valores CORRETOS para explicação."""
+        
         peso_item_atual = self.pesos_itens[r-1]
         valor_item_atual = self.valores_itens[r-1]
         nome_item_atual = self.nomes_itens[r-1]
         
-        # Pega os valores da tabela CORRETA para a explicação da dica
+        
         valor_se_nao_incluir = self.dp_table_correta[r-1][c] 
         
         valor_se_incluir_calculado = 0
@@ -418,7 +430,7 @@ class Missao3:
             )
         
         messagebox.showinfo(f"Cálculo de M[{r}][{c}]", dica_detalhada)
-        self.game_manager.add_score(-15) # Penalidade por pedir dica específica
+        self.game_manager.add_score(-15) 
 
 
     def _mostrar_dica_geral_pd(self): 
@@ -433,92 +445,166 @@ class Missao3:
             "  (Compare: não levar o item 'i' vs. levar o item 'i' e o valor restante com a capacidade diminuída)"
         )
         messagebox.showinfo("Dica de Programação Dinâmica (Geral)", dica_geral)
-        self.game_manager.add_score(-10) # Penalidade por pedir dica geral
+        self.game_manager.add_score(-10)
+
+    def _analisar_todas_as_celulas(self):
+        """
+        Coleta e verifica todas as células editáveis da tabela, marcando-as como
+        corretas (verde) ou incorretas (vermelho).
+        Dá feedback geral sobre o preenchimento, mas não avança a missão.
+        """
+        n_items = len(self.pesos_itens)
+        w_capacity = self.capacidade_mochila
+        
+        total_celulas_preenchidas = 0
+        total_celulas_corretas = 0
+        
+        
+        for r in range(n_items + 1):
+            for c in range(w_capacity + 1):
+                entry = self.cell_entries.get((r,c))
+                if entry and entry.cget('state') == tk.NORMAL: 
+                    entry.config(bg=self.entry_cell_bg, fg=self.entry_cell_fg, 
+                                 highlightbackground=self.default_cell_border, highlightcolor=self.default_cell_border)
+
+        
+        for r in range(n_items + 1):
+            for c in range(w_capacity + 1):
+                entry = self.cell_entries.get((r,c))
+                if entry and entry.cget('state') == tk.NORMAL: 
+                    try:
+                        val = entry.get()
+                        if not val.strip(): 
+                            continue 
+                        
+                        self.player_dp_table[r][c] = int(val)
+                        total_celulas_preenchidas += 1
+
+                    except ValueError: 
+                        entry.config(bg=self.incorrect_cell_bg, fg="white", 
+                                     highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
+                        messagebox.showwarning("Erro de Entrada", f"Célula M[{r}][{c}] contém valor inválido ('{val}'). Insira números inteiros para analisar.")
+                        entry.focus_set()
+                        return 
+
+        
+        for r in range(n_items + 1):
+            for c in range(w_capacity + 1):
+                entry = self.cell_entries.get((r,c))
+                # Verifica apenas as células que o jogador pode editar e preencheu
+                if entry and entry.cget('state') == tk.NORMAL and entry.get().strip(): 
+                    player_val = self.player_dp_table[r][c] 
+                    correct_val = self.dp_table_correta[r][c]
+
+                    if player_val == correct_val:
+                        entry.config(bg=self.correct_cell_bg, fg="white", 
+                                     highlightbackground=self.correct_cell_bg, highlightcolor=self.correct_cell_bg)
+                        total_celulas_corretas += 1
+                    else:
+                        entry.config(bg=self.incorrect_cell_bg, fg="white", 
+                                     highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
+        
+        feedback_msg = f"Análise da Tabela:\n\nTotal de células preenchidas (excluindo linhas/colunas 0): {total_celulas_preenchidas}\nCélulas corretas: {total_celulas_corretas}"
+        
+        
+        total_rows_editable = len(self.pesos_itens)
+        total_cols_editable = self.capacidade_mochila
+        total_editable_cells = total_rows_editable * total_cols_editable 
+
+        if total_celulas_preenchidas == total_editable_cells and total_celulas_corretas == total_editable_cells:
+            feedback_msg += "\n\nExcelente! Todas as células preenchidas estão corretas. Prossiga para 'Confirmar Tabela e Avançar'."
+            
+            self.analyze_all_button.config(state=tk.DISABLED) 
+        elif total_celulas_preenchidas > 0:
+            feedback_msg += "\n\nAs células corretas foram marcadas em verde e as incorretas em vermelho. Corrija as células em vermelho."
+        else:
+            feedback_msg += "\n\nNenhuma célula editável foi preenchida para análise."
+
+        messagebox.showinfo("Análise de Tabela", feedback_msg)
+        self.game_manager.add_score(-20) 
 
 
     def _confirmar_tabela_e_avancar(self):
         """
         Valida a tabela DP preenchida pelo jogador. Se correta, avança para a etapa de seleção de itens.
+        Caso contrário, informa os erros e permite ao jogador corrigir.
         """
         n_items = len(self.pesos_itens)
         w_capacity = self.capacidade_mochila
         
-        # Primeiro, limpa qualquer destaque de erro anterior das células editáveis
+        # Primeiro, limpa qualquer destaque de erro anterior de todas as células editáveis
         for r in range(n_items + 1):
             for c in range(w_capacity + 1):
                 entry = self.cell_entries.get((r,c))
-                # Somente limpa highlight de células editáveis (state=tk.NORMAL)
                 if entry and entry.cget('state') == tk.NORMAL: 
                     entry.config(bg=self.entry_cell_bg, highlightbackground=self.default_cell_border, highlightcolor=self.default_cell_border)
 
-        # ### CORREÇÃO CRÍTICA: Coleta os valores preenchidos pelo jogador para a player_dp_table
-        # e valida se são números inteiros, antes da comparação final.
+        all_cells_correct_now = True 
+
+        
         for r in range(n_items + 1):
             for c in range(w_capacity + 1):
                 entry = self.cell_entries.get((r, c))
-                # Processa apenas células que o jogador pode editar (não as desabilitadas de base)
-                if entry and entry.cget('state') == tk.DISABLED: # Se a célula está desabilitada (já verificada ou base)
-                     try:
-                         # Assegura que player_dp_table tenha o valor da UI, mesmo se for célula de 0.
-                         self.player_dp_table[r][c] = int(entry.get())
-                     except ValueError:
-                         # Isso não deveria acontecer se o preenchimento de '0' for sempre válido
-                         print(f"AVISO: Célula desabilitada M[{r}][{c}] com valor não numérico '{entry.get()}'. Default para 0.")
-                         self.player_dp_table[r][c] = 0 # Default para 0 para não quebrar o loop.
-                         pass
-                else: # Se a célula está habilitada (precisa ser preenchida pelo jogador)
-                    try:
-                        val = entry.get()
-                        if not val.strip(): # Se a célula está vazia ou só com espaços
-                            messagebox.showwarning("Erro de Preenchimento", f"Célula M[{r}][{c}] está vazia. Por favor, preencha todas as células com números inteiros.")
-                            entry.focus_set()
-                            entry.select_range(0, tk.END)
-                            return # Interrompe a validação
-                        self.player_dp_table[r][c] = int(val)
-                    except ValueError: # Se o valor não é um número inteiro
-                        messagebox.showwarning("Erro de Preenchimento", f"Célula M[{r}][{c}] contém valor inválido ('{val}'). Por favor, insira apenas números inteiros.")
+                
+                if entry.cget('state') == tk.NORMAL: 
+                    val = entry.get().strip()
+                    if not val: 
+                        messagebox.showwarning("Erro de Preenchimento", f"Célula M[{r}][{c}] está vazia. Por favor, preencha todas as células com números inteiros para avançar.")
                         entry.focus_set()
-                        entry.select_range(0, tk.END)
-                        return # Interrompe a validação
+                        entry.config(highlightbackground="red", highlightcolor="red")
+                        return 
+                    try:
+                        self.player_dp_table[r][c] = int(val)
+                    except ValueError: # Valor não numérico
+                        messagebox.showwarning("Erro de Preenchimento", f"Célula M[{r}][{c}] contém valor inválido ('{val}'). Por favor, insira apenas números inteiros para avançar.")
+                        entry.focus_set()
+                        entry.config(highlightbackground="red", highlightcolor="red")
+                        return 
 
-        # DEBUG: Printa o player_dp_table antes da comparação
-        print("\n--- DEBUG: Tabela do Jogador para Comparação (Parte 1) ---")
-        for row in self.player_dp_table:
-            print([f"{x:3}" for x in row]) 
-        print("-----------------------------------------------------------\n")
+                    
+                    if self.player_dp_table[r][c] != self.dp_table_correta[r][c]:
+                        all_cells_correct_now = False 
+                        entry.config(bg=self.incorrect_cell_bg, fg="white", 
+                                     highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
+                    else: # Célula correta
+                        entry.config(bg=self.correct_cell_bg, fg="white", 
+                                     highlightbackground=self.correct_cell_bg, highlightcolor=self.correct_cell_bg, 
+                                     state=tk.DISABLED) 
+                elif entry.cget('state') == tk.DISABLED: 
+                    try:
+                        self.player_dp_table[r][c] = int(entry.get())
+                        
+                        if self.player_dp_table[r][c] != self.dp_table_correta[r][c]:
+                            all_cells_correct_now = False
+                            entry.config(bg=self.incorrect_cell_bg, fg="white", 
+                                         highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
+                    except ValueError:
+                        print(f"AVISO: Célula desabilitada M[{r}][{c}] com valor não numérico '{entry.get()}'. Default para 0.")
+                        self.player_dp_table[r][c] = 0
+                        all_cells_correct_now = False 
+                        entry.config(bg=self.incorrect_cell_bg, fg="white", 
+                                     highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
 
-        # Valida a tabela inteira do jogador contra a tabela correta
-        is_table_correct = True
-        for i in range(n_items + 1):
-            for w in range(w_capacity + 1):
-                if self.player_dp_table[i][w] != self.dp_table_correta[i][w]:
-                    is_table_correct = False
-                    # Destacar as células erradas em vermelho
-                    self.cell_entries[(i, w)].config(bg=self.incorrect_cell_bg, highlightbackground=self.incorrect_cell_bg, highlightcolor=self.incorrect_cell_bg)
-                # Se a célula está correta e não é uma célula base já desabilitada
-                elif (i != 0 or w != 0) and self.cell_entries[(i, w)].cget('state') == tk.NORMAL: 
-                    # Pinta de verde e desabilita as células que foram preenchidas corretamente
-                    self.cell_entries[(i, w)].config(bg=self.correct_cell_bg, highlightbackground=self.correct_cell_bg, highlightcolor=self.correct_cell_bg, state=tk.DISABLED)
+
         
-        # Desabilita *todos* os campos e botões da Parte 1 após a validação, independentemente do sucesso
-        for r_final in range(n_items + 1):
-            for c_final in range(w_capacity + 1):
-                entry_final = self.cell_entries[(r_final,c_final)]
-                entry_final.config(state=tk.DISABLED, highlightbackground=self.default_cell_border, highlightcolor=self.default_cell_border)
-        self.check_cell_button.config(state=tk.DISABLED) # Desabilita o botão de verificar célula
-        self.hint_button.config(state=tk.DISABLED)
-        self.confirm_table_button.config(state=tk.DISABLED)
-
-
-        # DEBUG: Printa o valor final correto (da self.valor_final_correto) e o valor do jogador na última célula
-        print(f"\n--- DEBUG: Comparação Final (Parte 1) - Valores Finais ---")
+        print(f"\n--- DEBUG: Comparação Final (Parte 1 - Knapsack) ---")
         print(f"Valor Final Correto (self.valor_final_correto): {self.valor_final_correto}")
         print(f"Valor Final do Jogador (player_dp_table[{n_items}][{w_capacity}]): {self.player_dp_table[n_items][w_capacity]}")
-        print(f"Resultado da Comparação (is_table_correct): {is_table_correct}")
-        print("-------------------------------------------\n")
+        print(f"Resultado da Comparação (all_cells_correct_now): {all_cells_correct_now}")
+        print("-------------------------------------------------------\n")
 
 
-        if is_table_correct:
+        if all_cells_correct_now:
+            
+            for r_final in range(n_items + 1):
+                for c_final in range(w_capacity + 1):
+                    entry_final = self.cell_entries[(r_final,c_final)]
+                    entry_final.config(state=tk.DISABLED, highlightbackground=self.default_cell_border, highlightcolor=self.default_cell_border)
+            self.check_cell_button.config(state=tk.DISABLED)
+            self.hint_button.config(state=tk.DISABLED)
+            self.analyze_all_button.config(state=tk.DISABLED)
+            self.confirm_table_button.config(state=tk.DISABLED)
+            
             pontos = 250 
             if self.game_manager.player_score >= 0: 
                 pontos += 50
@@ -529,12 +615,14 @@ class Missao3:
             self._iniciar_etapa_selecao_itens() 
         else:
             self.game_manager.add_score(-100) 
-            messagebox.showerror("Falha Estratégica (Tabela)", f"Sua tabela contém erros. O valor total máximo que poderia ser salvo era {self.valor_final_correto}, mas sua análise resultou em um resultado incorreto. Revise a lógica da Programação Dinâmica. As células incorretas foram destacadas em vermelho.")
-            self.game_manager.mission_failed_options(
-                self,
-                "Erro de Cálculo Crítico",
-                "Fulcrum: \"A lógica de otimização é a chave para a vitória. Precisamos de precisão cirúrgica em cada decisão.\""
-            )
+            messagebox.showerror("Falha Estratégica (Tabela)", f"Sua tabela contém erros. O valor total máximo que poderia ser salvo era {self.valor_final_correto}. As células incorretas foram destacadas em vermelho. Por favor, corrija-as e tente novamente.")
+            
+            
+            self.confirm_table_button.config(state=tk.NORMAL) 
+            self.check_cell_button.config(state=tk.NORMAL)
+            self.analyze_all_button.config(state=tk.NORMAL)
+            self.hint_button.config(state=tk.NORMAL)
+           
 
     def _iniciar_etapa_selecao_itens(self):
         """Inicia a segunda etapa da missão: seleção dos itens ótimos."""
@@ -561,7 +649,7 @@ class Missao3:
             bg=self.bg_color
         ).pack(pady=10, padx=20)
 
-        # DEBUG: Imprime a resposta correta no console ANTES do jogador selecionar
+        
         correct_names_debug = [self.nomes_itens[idx] for idx in sorted(self.itens_selecionados_corretos)]
         print(f"\n--- DEBUG: ITENS CORRETOS PARA SELEÇÃO (COLA): {', '.join(correct_names_debug)} ---")
         total_val_debug = sum(self.valores_itens[idx] for idx in self.itens_selecionados_corretos)
@@ -577,7 +665,7 @@ class Missao3:
             bg=self.bg_color
         ).pack(pady=(10, 5))
 
-        # --- Re-exibir a tabela preenchida (apenas visualização, não editável) ---
+        
         table_display_canvas_frame = tk.Frame(self.base_content_frame, bg=self.bg_color)
         table_display_canvas_frame.pack(pady=5, padx=20, fill=tk.BOTH, expand=True)
 
@@ -594,7 +682,7 @@ class Missao3:
         display_canvas.create_window((0,0), window=display_table_inner_frame, anchor="nw")
         display_table_inner_frame.bind("<Configure>", lambda e: display_canvas.configure(scrollregion = display_canvas.bbox("all")))
 
-        # Popula a tabela de display (como labels)
+        
         for w in range(self.capacidade_mochila + 1):
             lbl = tk.Label(display_table_inner_frame, text=str(w), font=self.table_header_font, bg=self.bg_color, fg=self.fg_color, relief="solid", bd=1)
             lbl.grid(row=0, column=w+1, sticky="nsew")
@@ -609,10 +697,12 @@ class Missao3:
             tk.Label(display_table_inner_frame, text=row_header_text, font=self.table_header_font, bg=self.bg_color, fg=self.fg_color, relief="solid", bd=1).grid(row=i+1, column=0, sticky="nsew")
             
             for w in range(self.capacidade_mochila + 1):
-                val = self.player_dp_table[i][w] # Usa a tabela que o jogador preencheu e validou na Parte 1
-                lbl = tk.Label(display_table_inner_frame, text=str(val), font=self.dp_cell_font, bg=self.bg_color, fg="lightgreen", relief="solid", bd=1) 
+                val = self.player_dp_table[i][w] 
+                
+                cell_fg_color = "lightgreen" if self.player_dp_table[i][w] == self.dp_table_correta[i][w] else "red"
+                lbl = tk.Label(display_table_inner_frame, text=str(val), font=self.dp_cell_font, bg=self.bg_color, fg=cell_fg_color, relief="solid", bd=1) 
                 lbl.grid(row=i+1, column=w+1, sticky="nsew")
-        # --- Fim da exibição da tabela ---
+        
 
         tk.Label(
             self.base_content_frame,

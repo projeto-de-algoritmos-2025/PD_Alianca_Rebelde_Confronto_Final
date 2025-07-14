@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, font as tkFont
 import random
-from algoritmos_pd.alinhamento_sequencias import alinhamento_sequencias_pd # Importa o algoritmo de alinhamento
+from algoritmos_pd.alinhamento_sequencias import alinhamento_sequencias_pd 
 
 class Missao4:
     def __init__(self, root, game_manager, content_frame):
@@ -22,7 +22,7 @@ class Missao4:
         self.player_dp_table = [] 
         self.cell_entries = {} 
 
-        # Atributos para o rastreamento interativo (Parte 2) 
+         
         self.current_i_trace = -1 
         self.current_j_trace = -1 
         self.ops_table_entries = [] 
@@ -735,7 +735,7 @@ class Missao4:
         headers = ["Operação", "Custo", "Char X", "Char Y"]
         self.ops_table_entries = [] 
 
-        # Cabeçalhos
+        
         for col, header_text in enumerate(headers):
             lbl = tk.Label(self.ops_table_frame, text=header_text, font=self.small_bold_font, bg=self.ops_header_bg, fg="white", relief="solid", bd=1)
             lbl.grid(row=0, column=col, sticky="nsew", padx=1, pady=1)
@@ -757,7 +757,7 @@ class Missao4:
                     highlightbackground="gray", highlightcolor="yellow", highlightthickness=1
                 )
                 entry.grid(row=row_idx+1, column=col, sticky="nsew", padx=1, pady=1)
-                entry.config(state=tk.NORMAL) # Habilita todas as células para preenchimento
+                entry.config(state=tk.NORMAL) 
                 row_entries.append(entry)
             self.ops_table_entries.append(row_entries)
 
@@ -864,7 +864,7 @@ class Missao4:
         
         
         for row_idx in range(max(num_player_steps, expected_steps)):
-            player_op = {} # Para armazenar a entrada do jogador de forma estruturada
+            player_op = {} 
             current_row_entries = None
 
             
@@ -884,9 +884,9 @@ class Missao4:
                     continue 
             else: 
                 all_steps_correct = False
-                continue # Pula para a próxima linha
+                continue 
 
-            # Compara com a operação correta, se ela existe para esta linha
+            
             if row_idx < expected_steps:
                 correct_op_tuple = self.alinhamento_operacoes_correto[row_idx]
                 correct_op = {
