@@ -119,6 +119,60 @@ Abaixo estão os screenshots do projeto
 ### Missão 4 - DNA de Esperança - (Alinhamento de Sequências)
 
 
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-19-09.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-20-21.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-20-50.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-21-01.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-22-19.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 4:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-23-01.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
 
 ### Missão 5 - O Eco das Escolhas
 
