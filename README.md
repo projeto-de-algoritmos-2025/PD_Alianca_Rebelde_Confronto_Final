@@ -45,7 +45,10 @@ Para ter acesso aos códigos dos algoritmos clique em [Aliança Rebelde- O Confr
 
 ## Link do vídeo
 
-Acesse ao vídeo [aqui](ADICIONAR LINK)
+Acesse ao vídeo [aqui](https://youtu.be/iSa8FW7RYm8)
+
+link do vídeo: https://youtu.be/iSa8FW7RYm8 
+
 
 ## Screenshots
 
