@@ -71,6 +71,51 @@ Abaixo estão os screenshots do projeto
 
 ### Missão 3 - Carga de Resistência - (Knapsack com PD)
 
+<div align="center">
+    Figura Missão 3:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-16-39.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 3:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-17-47.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 3:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-18-18.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 3:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-18-42.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura Missão 3:
+    <br>
+    <img src="https://raw.githubusercontent.com/projeto-de-algoritmos-2025/PD_Alianca_Rebelde_Confronto_Final/refs/heads/main/img/Screenshot%20from%202025-07-14%2000-18-51.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
 ### Missão 4 - DNA de Esperança - (Alinhamento de Sequências)
 
 
